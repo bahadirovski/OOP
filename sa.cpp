@@ -3,12 +3,13 @@
 #include <ctime>
 using namespace std;
 
+template <class T = int, class M = int> // default template
 class SafeArray {
   private:
     int N;
-    int *arr;
+    T *arr;
 
-    void put(int i, int val) {
+    void put(int i, T val) {
       arr[i] = val;
     }
 
@@ -21,18 +22,18 @@ class SafeArray {
     SafeArray(int SIZE, int FILL = 0) {
       if (SIZE != 0) {
         N = SIZE;
-        arr = new int[SIZE];
+        arr = new T[SIZE];
         if (FILL == 0) {
-          for (int i = 0; i < SIZE; i++) arr[i] = 0; 
+          for (int i = 0; i < SIZE; i++) arr[i] = (T)0; 
         } else {
-          unsigned int t = static_cast<unsigned int>(time(NULL));
+          T t = static_cast<T>(time(NULL));
           srand(t);
-          for (int i = 0; i < SIZE; i++) arr[i] = rand()%FILL;
+          for (int i = 0; i < SIZE; i++) arr[i] = T(i)/33.; //static_cast<T>(rand()%FILL);
         }
       }   
     }
 
-    int at(int i) {
+    T at(M i) {
       if (i < N && i >= 0) {
         return arr[i];
       } else {
@@ -41,8 +42,8 @@ class SafeArray {
       }
     }
 
-    SafeArray operator + (SafeArray &other) {
-      SafeArray tmp(N);
+    SafeArray<T,M> operator + (SafeArray<T,M> &other) {
+      SafeArray<T,M> tmp(N);
       for (int i = 0; i < N; i++) {
         //tmp.put(i, arr[i]+other.arr[i]);
         tmp.arr[i] = arr[i]+other.arr[i];
@@ -53,14 +54,14 @@ class SafeArray {
 
 int main(){
   // test default constructor
-  SafeArray sa0;
+  SafeArray <double> sa0;
 
   // test overloaded constructor
-  SafeArray sa1(10, 10);
-  SafeArray sa2(10, 5);
+  SafeArray <double> sa1(10, 10);
+  SafeArray <double> sa2(10, 5);
 
   // perform arithmetic operation
-  SafeArray sa3 = sa1+sa2;
+  SafeArray <double> sa3 = sa1+sa2;
   //sa3[5] = 4;
 
   // print content
